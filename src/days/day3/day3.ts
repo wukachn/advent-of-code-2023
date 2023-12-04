@@ -74,52 +74,52 @@ const findNumsAround = (lines: string[], lineIndex: number, charIndex: number) =
 }
 
 const solve_ex1 = async () => {
-  const puzzleInput = await readFile(`./input.txt`);
-  const lines = puzzleInput.split('\n')
+    const puzzleInput = await readFile(`./input.txt`);
+    const lines = puzzleInput.split('\n')
 
-  const nums: number[] = []
-  for (let currentLineNum = 0; currentLineNum < lines.length; currentLineNum++){
-    let currentNum = ""
-    let isSymbolAround = false
-    for (let currentCharNum = 0; currentCharNum < lines[0].length; currentCharNum++) {
-        const currentCharacter = lines[currentLineNum][currentCharNum]
-        if (!isNaN(parseInt(currentCharacter))) {
-            currentNum += currentCharacter
-            isSymbolAround = checkIfSymbolAround(lines, currentLineNum, currentCharNum) || isSymbolAround
-        } else {
-            if (isSymbolAround) {
-                nums.push(Number(currentNum))
+    const nums: number[] = []
+    for (let currentLineNum = 0; currentLineNum < lines.length; currentLineNum++) {
+        let currentNum = ""
+        let isSymbolAround = false
+        for (let currentCharNum = 0; currentCharNum < lines[0].length; currentCharNum++) {
+            const currentCharacter = lines[currentLineNum][currentCharNum]
+            if (!isNaN(parseInt(currentCharacter))) {
+                currentNum += currentCharacter
+                isSymbolAround = checkIfSymbolAround(lines, currentLineNum, currentCharNum) || isSymbolAround
+            } else {
+                if (isSymbolAround) {
+                    nums.push(Number(currentNum))
+                }
+                currentNum = ""
+                isSymbolAround = false
             }
-            currentNum = ""
-            isSymbolAround = false
+        }
+        if (isSymbolAround) {
+            nums.push(Number(currentNum))
         }
     }
-    if (isSymbolAround) {
-        nums.push(Number(currentNum))
-    }
-  }
 
-  const sum = nums.reduce((acc, val) => acc + val, 0)
-  console.log("Ex 1: " + sum) // 512794
+    const sum = nums.reduce((acc, val) => acc + val, 0)
+    console.log("Ex 1: " + sum) // 512794
 }
 
 const solve_ex2 = async () => {
-  const puzzleInput = await readFile(`./input.txt`);
-  const lines = puzzleInput.split('\n')
+    const puzzleInput = await readFile(`./input.txt`);
+    const lines = puzzleInput.split('\n')
 
-  let total = 0
-  for (let i = 0; i < lines.length; i++) {
-    for (let j = 0; j < lines[0].length; j++) {
-        if (lines[i][j]=='*') {
-            const numbersAround = findNumsAround(lines, i, j)
-            if (numbersAround.length == 2) {
-                total += numbersAround[0] * numbersAround[1]
+    let total = 0
+    for (let i = 0; i < lines.length; i++) {
+        for (let j = 0; j < lines[0].length; j++) {
+            if (lines[i][j] == '*') {
+                const numbersAround = findNumsAround(lines, i, j)
+                if (numbersAround.length == 2) {
+                    total += numbersAround[0] * numbersAround[1]
+                }
             }
         }
     }
-  }
-  
-  console.log("Ex 2: " + total) // 67779080
+
+    console.log("Ex 2: " + total) // 67779080
 }
 
 solve_ex1()
