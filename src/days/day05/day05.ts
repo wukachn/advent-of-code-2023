@@ -1,6 +1,6 @@
 import readFile from "../../util/readFile";
 
-function createRange(start: number, end: number) {
+const createRange = (start: number, end: number) => {
     let range: number[] = [];
     for (let i = start; i <= end; i++) {
         range.push(i)
