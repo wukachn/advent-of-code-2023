@@ -58,7 +58,6 @@ const solve_ex2 = async () => {
 
     let minimum = Infinity
     for (const seedGroup of seedGroups) {
-        console.log("loop")
         const seedMin = seedGroup[0]
         const seedMax = seedGroup[1]
         for (let s = seedMin; s < seedMax; s++) {
