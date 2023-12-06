@@ -3,7 +3,7 @@ import readFile from "../../util/readFile";
 const solve_ex1 = async () => {
   const puzzleInput = await readFile(`./input.txt`);
   let total = puzzleInput.split('\n').map(line => line.replace(/\D/g, '')).map(nums => Number(nums.substring(0, 1) + nums.substring(nums.length - 1))).reduce((acc, val) => acc + val, 0)
-  console.log("Ex 1: " + total)
+  console.log("Ex 1: " + total) // 54601
 }
 
 const solve_ex2 = async () => {
@@ -29,7 +29,7 @@ const solve_ex2 = async () => {
     return num
   })).map(nums => Number(nums[0] + nums[nums.length - 1])).reduce((acc, val) => acc + val, 0)
 
-  console.log("Ex 2: " + total)
+  console.log("Ex 2: " + total) // 54078
 }
 
 solve_ex1()

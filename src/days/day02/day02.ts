@@ -47,7 +47,7 @@ const solve_ex1 = async () => {
     }
 
     const total = possibleGames.reduce((acc, val) => acc + val, 0)
-    console.log("Ex 1: " + total)
+    console.log("Ex 1: " + total) // 2283
 }
 
 const solve_ex2 = async () => {
@@ -91,7 +91,7 @@ const solve_ex2 = async () => {
     }
 
     const total = powers.reduce((acc, val) => acc + val, 0)
-    console.log("Ex 2: " + total)
+    console.log("Ex 2: " + total) // 78669
 }
 
 solve_ex1()
