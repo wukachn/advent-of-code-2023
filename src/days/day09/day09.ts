@@ -6,12 +6,7 @@ const findHistorySequences = (histories: number[][]): number[][][] => {
         let currentSequence: number[] = history
         const historySequences: number[][] = [[...currentSequence]]
         while (new Set(currentSequence).size !== 1) {
-            let currentElement: number = currentSequence[0]
-            let currentDiffs: number[] = []
-            for (let i = 1; i < currentSequence.length; i++) {
-                currentDiffs.push(currentSequence[i] - currentElement)
-                currentElement = currentSequence[i]
-            }
+            const currentDiffs: number[] = currentSequence.slice(1).map((v, i) => v - currentSequence[i])
             historySequences.push(currentDiffs)
             currentSequence = currentDiffs
         }
