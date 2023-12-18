@@ -149,7 +149,7 @@ const run = async () => {
     const map: number[][] = puzzleInput.split('\n').map(line => line.split('').map(Number))
 
     console.log("Ex 1: " + dijkstra(map, 0, 3)) // 953
-    console.log("Ex 1: " + dijkstra(map, 4, 10)) // 1180
+    console.log("Ex 2: " + dijkstra(map, 4, 10)) // 1180
 
 }
 
