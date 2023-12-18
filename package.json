@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "area-polygon": "^1.0.1",
     "just-memoize": "^2.2.0",
     "ts-priority-queue": "^0.1.1"
   }
