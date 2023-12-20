@@ -1,4 +1,5 @@
 import readFile from "../../util/readFile"
+import { findLCM } from "../../util/math"
 
 interface FlipFlop extends Module {
     on: boolean
@@ -14,8 +15,8 @@ interface Module {
 }
 
 interface InputSignal {
-    from: string
-    moduleName: string
+    origin: string
+    destination: string
     isHigh: boolean
 }
 
@@ -34,8 +35,6 @@ const getInputSignals = (modules: Module[], inputModuleName: string, isHigh: boo
     }
 
     const inputModule: Module = modules[inputModuleIndex]
-    const outputSignal: InputSignal[] = []
-    const destinations: string[] = inputModule?.destinations
     let outputIsHigh: boolean = isHigh
     if (isConjunction(inputModule)) {
         let allHigh: boolean = true
@@ -53,35 +52,67 @@ const getInputSignals = (modules: Module[], inputModuleName: string, isHigh: boo
             return []
         }
     }
-    for (const dest of destinations) {
-        outputSignal.push({ moduleName: dest, isHigh: outputIsHigh, from: inputModule.name })
+
+    const outputSignal: InputSignal[] = []
+    for (const destination of inputModule?.destinations) {
+        outputSignal.push({ destination, isHigh: outputIsHigh, origin: inputModule.name })
     }
     return outputSignal
 }
 
-const pressButton = (modules: Module[]): [number, number] => {
+const pressButtonForSignalCounts = (modules: Module[]): [number, number] => {
     const queue: InputSignal[] = [...getInputSignals(modules, 'broadcaster', false)]
     let lowPulses = 0, highPulses = 0
     while (queue.length !== 0) {
         const signal = queue.shift()
         if (!signal) {
-            throw new Error('Never Reach Here')
+            throw new Error('Unreachable')
         }
 
         (signal.isHigh) ? highPulses++ : lowPulses++
 
         modules.forEach((mod) => {
-            if (isConjunction(mod) && mod.inputModules.has(signal.from)) {
-                mod.inputModules.set(signal.from, signal.isHigh)
+            if (isConjunction(mod) && mod.inputModules.has(signal.origin)) {
+                mod.inputModules.set(signal.origin, signal.isHigh)
             }
         })
 
-        queue.push(...getInputSignals(modules, signal.moduleName, signal.isHigh))
+        queue.push(...getInputSignals(modules, signal.destination, signal.isHigh))
     }
     return [lowPulses + 1, highPulses] // +1 for the initial low button signal
 }
 
-const run = async () => {
+const getNumOfPressesToTurnOn = (modules: Module[]): number => {
+    let outputConjunctionInputs: Map<string, number> = new Map<string, number>()
+    let pushes = 0
+    while ([...outputConjunctionInputs.keys()].length !== 4) {
+        pushes++
+        const queue: InputSignal[] = [...getInputSignals(modules, 'broadcaster', false)]
+        while (queue.length !== 0) {
+            const signal = queue.shift()
+            if (!signal) {
+                throw new Error('Never Reach Here')
+            }
+
+            if (['bt', 'dl', 'fr', 'rv'].includes(signal.origin) && signal.isHigh && !outputConjunctionInputs.has(signal.origin)) {
+                outputConjunctionInputs.set(signal.origin, pushes)
+            }
+
+            modules.forEach((mod) => {
+                if (isConjunction(mod) && mod.inputModules.has(signal.origin)) {
+                    mod.inputModules.set(signal.origin, signal.isHigh)
+                }
+            })
+
+            queue.push(...getInputSignals(modules, signal.destination, signal.isHigh))
+        }
+    }
+
+    const pushesUntilOn: number = findLCM([...outputConjunctionInputs.values()])
+    return pushesUntilOn
+}
+
+const getModules = async (): Promise<Module[]> => {
     const puzzleInput: string = await readFile(`./input.txt`)
     const modules: Module[] = puzzleInput.split('\n').map(line => {
         const lineParts: string[] = line.split(' -> ')
@@ -104,13 +135,21 @@ const run = async () => {
             }
         }
     }
+    return modules
+}
 
+const run = async () => {
+    let modules: Module[] = await getModules()
     let lowPulses = 0, highPulses = 0
     for (let i = 0; i < 1000; i++) {
-        const [low, high] = pressButton(modules)
+        const [low, high] = pressButtonForSignalCounts(modules)
         lowPulses += low, highPulses += high
     }
     console.log("Ex 1: " + lowPulses * highPulses) // 834323022
+
+    modules = await getModules() // 😜
+    const presses = getNumOfPressesToTurnOn(modules)
+    console.log("Ex 2: " + presses) // 225386464601017
 }
 
 run()
