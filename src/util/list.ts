@@ -8,3 +8,16 @@ export const arraysEqual = (a: any[], b: any[]) => {
     }
     return true
 }
+
+export const remove2dDuplicates = (arr: any[][]): any[][] => {
+    const uniqueArray: any[][] = []
+    const map = new Map<string, boolean>()
+    for (const subArr of arr) {
+        const key = JSON.stringify(subArr)
+        if (!map.has(key)) {
+            uniqueArray.push(subArr)
+            map.set(key, true)
+        }
+    }
+    return uniqueArray
+}
