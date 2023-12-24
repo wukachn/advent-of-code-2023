@@ -105,7 +105,7 @@ const run = async () => {
     console.log("Ex 1: " + total) // 21679
 
     const result = await solveThrow(hail)
-    console.log("Ex 2: " + result) // 
+    console.log("Ex 2: " + result) // 566914635762564
 }
 
 run()
