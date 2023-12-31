@@ -13,5 +13,5 @@ cd src/days/<day_>
 npx ts-node <day_>.ts
 ```
 
-## Completed Advent Calender
+## Final Advent Calendar
 <img width="300" alt="Screenshot 2023-12-31 at 15 27 41" src="https://github.com/wukachn/advent-of-code-2023/assets/68754675/2433bab7-4345-4c32-8bf3-cedc8d44849f">
